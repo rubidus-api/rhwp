@@ -98,6 +98,11 @@ import { installEmbedRuntime } from '@/embed/runtime';
 import type { EmbedRendererRuntimeRequestV1 } from '@/embed/rpc-router';
 import { enrichFontDecisionTrace } from '@/core/font-decision-trace';
 import { DocumentAgentController } from '@/document-agent/controller';
+import { initI18n, t } from '@/i18n/index.ts';
+
+// 언어팩 초기화 — 정적 마크업의 라벨을 결정된 로케일로 갱신한다. 카탈로그에 없는 키는
+// 원문(ko)으로 물러나므로 번역이 없는 상태에서도 화면은 도입 전과 같다.
+initI18n();
 
 const wasm = new WasmBridge();
 const eventBus = new EventBus();
@@ -1086,7 +1091,7 @@ function setupEventListeners(): void {
       documentPageNumber: pageInfo?.pageNumber,
     });
     if (pageInfo) {
-      sbSection().textContent = `구역: ${pageInfo.sectionIndex + 1} / ${totalSections}`;
+      sbSection().textContent = t('ui.sbSection.text', { p1: pageInfo.sectionIndex + 1, p2: totalSections });
     }
   });
 
@@ -1112,7 +1117,7 @@ function setupEventListeners(): void {
 
   // 삽입/수정 모드 토글
   eventBus.on('insert-mode-changed', (insertMode) => {
-    document.getElementById('sb-mode')!.textContent = (insertMode as boolean) ? '삽입' : '수정';
+    document.getElementById('sb-mode')!.textContent = (insertMode as boolean) ? t('ui.sbMode.label') : t('ui.sbMode.label.overwrite');
   });
 
   eventBus.on('document-mutated', (reason) => {
@@ -1206,7 +1211,7 @@ function setupEventListeners(): void {
       hfGroup.hidden = !isActive;
     }
     if (hfLabel) {
-      hfLabel.textContent = (mode as string) === 'header' ? '머리말' : (mode as string) === 'footer' ? '꼬리말' : '';
+      hfLabel.textContent = (mode as string) === 'header' ? t('ui.tbHfLabel.header') : (mode as string) === 'footer' ? t('ui.tbHfLabel.footer') : '';
     }
     defaultTbGroups.forEach((el) => {
       (el as HTMLElement).hidden = isActive;
@@ -1304,7 +1309,7 @@ async function initializeDocument(
     await loadStoredLocalFonts();
     await updateLoadProgress(75, '문서 상태 적용 중...');
     totalSections = docInfo.sectionCount ?? 1;
-    sbSection().textContent = `구역: 1 / ${totalSections}`;
+    sbSection().textContent = t('ui.sbSection.text', { p1: 1, p2: totalSections });
     applySavedTextMarkSettings();
     console.log('[initDoc] 3. inputHandler deactivate');
     inputHandler?.deactivate();
@@ -1609,7 +1614,7 @@ async function renderRecentSubmenu(): Promise<void> {
 
   const frag = document.createDocumentFragment();
   if (recents.length === 0) {
-    frag.append(makeItem({ label: '(최근 문서 없음)', disabled: true }));
+    frag.append(makeItem({ label: t('menu.file.label.x46b91c'), disabled: true }));
   } else {
     const visibleRecents = recentSubmenuExpanded
       ? recents
