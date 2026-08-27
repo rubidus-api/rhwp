@@ -1,3 +1,4 @@
+import { t } from '../i18n/index.ts';
 export const STYLE_TOOLBAR_FULL_ROW_MIN = 962;
 export const STYLE_TOOLBAR_COMMAND_INLINE_MIN = 460;
 export const STYLE_TOOLBAR_ONE_ROW_MIN = 808;
@@ -175,8 +176,8 @@ export class StyleToolbarOverflowController {
       : '문단 정렬 더보기';
     this.trigger.setAttribute('aria-label', accessibleLabel);
     this.trigger.title = currentAlignment
-      ? `문단 정렬 더보기 (현재 ${currentAlignment})`
-      : '문단 정렬 더보기';
+      ? t('dialog.styleToolbarOverflow.trigger.tooltip', { p1: currentAlignment })
+      : t('dialog.styleToolbarOverflow.syncIndicator.tooltip');
   }
 
   dispose(): void {

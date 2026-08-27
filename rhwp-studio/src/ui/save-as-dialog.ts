@@ -7,6 +7,7 @@
 import { ModalDialog } from './dialog';
 import { fileNameForFormat, type SaveFormat } from '@/command/save-target';
 
+import { t } from '../i18n/index.ts';
 export interface SaveAsDialogResult {
   fileName: string;
   configurePassword: boolean;
@@ -22,7 +23,7 @@ class SaveAsDialog extends ModalDialog {
     private readonly format: SaveFormat,
     private readonly allowPassword: boolean,
   ) {
-    super('다른 이름으로 저장', 380);
+    super(t('dialog.saveAs.title'), 380);
     this.defaultName = defaultName;
   }
 
@@ -31,7 +32,7 @@ class SaveAsDialog extends ModalDialog {
     body.style.padding = '16px 20px';
 
     const label = document.createElement('label');
-    label.textContent = '파일 이름(N):';
+    label.textContent = t('dialog.saveAs.label.text');
     label.style.display = 'block';
     label.style.marginBottom = '6px';
     label.style.fontSize = '13px';
@@ -58,7 +59,7 @@ class SaveAsDialog extends ModalDialog {
       const passwordButton = document.createElement('button');
       passwordButton.type = 'button';
       passwordButton.className = 'dialog-btn';
-      passwordButton.textContent = '암호 설정...';
+      passwordButton.textContent = t('dialog.saveAs.passwordButton.text');
       passwordButton.style.marginTop = '12px';
       passwordButton.addEventListener('click', () => {
         const value = this.confirmValue();
