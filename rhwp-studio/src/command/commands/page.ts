@@ -7,6 +7,7 @@ import { ColumnSettingsDialog } from '@/ui/column-settings-dialog';
 import { NewNumberDialog } from '@/ui/new-number-dialog';
 import { InsertFieldInHeaderFooterCommand } from '@/engine/command';
 
+import { t } from '../../i18n/index.ts';
 function stub(id: string, label: string, icon?: string, shortcut?: string): CommandDef {
   return {
     id,
@@ -214,7 +215,7 @@ export const pageCommands: CommandDef[] = [
   {
     id: 'page:setup',
     opensDialog: true,
-    label: '편집 용지',
+    label: t('command.page.setup.label'),
     icon: 'icon-page-setup',
     shortcutLabel: 'F7',
     canExecute: (ctx) => ctx.hasDocument,
@@ -229,7 +230,7 @@ export const pageCommands: CommandDef[] = [
   {
     id: 'page:page-border',
     opensDialog: true,
-    label: '쪽 테두리/배경',
+    label: t('command.page.pageBorder.label'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
@@ -242,7 +243,7 @@ export const pageCommands: CommandDef[] = [
   // ─── 머리말 ──────────────────────────────────
   {
     id: 'page:header-create',
-    label: '머리말',
+    label: t('command.page.headerCreate.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       enterHeaderFooterEditing(services, true);
@@ -251,7 +252,7 @@ export const pageCommands: CommandDef[] = [
   // ─── 꼬리말 ──────────────────────────────────
   {
     id: 'page:footer-create',
-    label: '꼬리말',
+    label: t('command.page.footerCreate.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       enterHeaderFooterEditing(services, false);
@@ -260,7 +261,7 @@ export const pageCommands: CommandDef[] = [
   // ─── 머리말/꼬리말 닫기 ────────────────────────
   {
     id: 'page:headerfooter-close',
-    label: '머리말/꼬리말 닫기',
+    label: t('command.page.headerfooterClose.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
@@ -288,7 +289,7 @@ export const pageCommands: CommandDef[] = [
   // ─── 머리말/꼬리말 지우기 ──────────────────────
   {
     id: 'page:headerfooter-delete',
-    label: '머리말/꼬리말 지우기',
+    label: t('command.page.headerfooterDelete.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
@@ -319,7 +320,7 @@ export const pageCommands: CommandDef[] = [
   // ─── 머리말/꼬리말 이전/다음 이동 ─────────────────
   {
     id: 'page:headerfooter-prev',
-    label: '이전 머리말/꼬리말',
+    label: t('command.page.headerfooterPrev.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       navigateHeaderFooter(services, -1);
@@ -327,7 +328,7 @@ export const pageCommands: CommandDef[] = [
   },
   {
     id: 'page:headerfooter-next',
-    label: '다음 머리말/꼬리말',
+    label: t('command.page.headerfooterNext.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       navigateHeaderFooter(services, 1);
@@ -336,7 +337,7 @@ export const pageCommands: CommandDef[] = [
   {
     id: 'page:new-page-num',
     opensDialog: true,
-    label: '새 번호로 시작',
+    label: t('command.page.newPageNum.label'),
     canExecute: (ctx) => ctx.hasDocument && !ctx.inTable,
     execute(services) {
       const ih = services.getInputHandler();
@@ -356,7 +357,7 @@ export const pageCommands: CommandDef[] = [
   // ─── 머리말/꼬리말 현재 쪽 감추기 ──────────────
   {
     id: 'page:hide-headerfooter',
-    label: '머리말/꼬리말 현재 쪽 감추기',
+    label: t('command.page.hideHeaderfooter.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
@@ -382,7 +383,7 @@ export const pageCommands: CommandDef[] = [
   },
   {
     id: 'page:hide-current',
-    label: '현재 쪽만 감추기',
+    label: t('command.page.hideCurrent.label'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
@@ -408,26 +409,26 @@ export const pageCommands: CommandDef[] = [
   // ─── 머리말/꼬리말 필드 삽입 ────────────────────
   {
     id: 'page:insert-field-pagenum',
-    label: '쪽 번호 삽입',
+    label: t('command.page.insertFieldPagenum.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) { insertHfField(services, 1); },
   },
   {
     id: 'page:insert-field-totalpage',
-    label: '총 쪽수 삽입',
+    label: t('command.page.insertFieldTotalpage.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) { insertHfField(services, 2); },
   },
   {
     id: 'page:insert-field-filename',
-    label: '파일 이름 삽입',
+    label: t('command.page.insertFieldFilename.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) { insertHfField(services, 3); },
   },
   // ─── 머리말/꼬리말 마당 (템플릿) ─────────────────────
   {
     id: 'page:apply-hf-template',
-    label: '머리말/꼬리말 마당',
+    label: t('command.page.applyHfTemplate.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services, params) {
       const isHeader = params?.isHeader === 'true';
@@ -438,7 +439,7 @@ export const pageCommands: CommandDef[] = [
   },
   {
     id: 'page:break',
-    label: '쪽 나누기',
+    label: t('command.page.break.label'),
     shortcutLabel: 'Ctrl+Enter',
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
@@ -469,7 +470,7 @@ export const pageCommands: CommandDef[] = [
   },
   {
     id: 'page:hide',
-    label: '감추기',
+    label: t('command.page.hide.registryLabel'),
     shortcutLabel: 'Ctrl+M,S',
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
@@ -501,7 +502,7 @@ export const pageCommands: CommandDef[] = [
   },
   {
     id: 'page:column-break',
-    label: '단 나누기',
+    label: t('command.page.columnBreak.label'),
     shortcutLabel: 'Ctrl+Shift+Enter',
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
@@ -532,9 +533,9 @@ export const pageCommands: CommandDef[] = [
   },
   // 다단 프리셋 — ColumnDef 컨트롤 수정 (SectionDef와 독립)
   ...[
-    { id: 'page:col-1', label: '단 - 하나', cols: 1 },
-    { id: 'page:col-2', label: '단 - 둘', cols: 2 },
-    { id: 'page:col-3', label: '단 - 셋', cols: 3 },
+    { id: 'page:col-1', label: t('command.page.col1.registryLabel'), cols: 1 },
+    { id: 'page:col-2', label: t('command.page.col2.registryLabel'), cols: 2 },
+    { id: 'page:col-3', label: t('command.page.col3.registryLabel'), cols: 3 },
   ].map((def): CommandDef => ({
     id: def.id,
     label: def.label,
@@ -561,7 +562,7 @@ export const pageCommands: CommandDef[] = [
   })),
   {
     id: 'page:col-left',
-    label: '단 - 왼쪽',
+    label: t('command.page.colLeft.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
@@ -582,7 +583,7 @@ export const pageCommands: CommandDef[] = [
   },
   {
     id: 'page:col-right',
-    label: '단 - 오른쪽',
+    label: t('command.page.colRight.registryLabel'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
@@ -604,7 +605,7 @@ export const pageCommands: CommandDef[] = [
   {
     id: 'page:col-settings',
     opensDialog: true,
-    label: '다단 설정',
+    label: t('command.page.colSettings.label'),
     shortcutLabel: 'Ctrl+Alt+Enter',
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
@@ -619,7 +620,7 @@ export const pageCommands: CommandDef[] = [
   {
     id: 'page:section-settings',
     opensDialog: true,
-    label: '구역 설정',
+    label: t('command.page.sectionSettings.label'),
     canExecute: (ctx) => ctx.hasDocument,
     execute(services) {
       const ih = services.getInputHandler();
