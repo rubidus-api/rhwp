@@ -191,6 +191,9 @@
 
 #style-name { width: 88px; }
 .sb-font-lang { width: 64px; font-size: var(--font-size-sm); }
+/* 영어 라벨은 한국어보다 넓다(Japanese 50px vs 일어 20px). 폭을 그대로 두면 잘린다.
+   보정은 html[lang] 으로 걸어 그 로케일에서만 넓힌다 — 한국어 화면은 1px 도 바뀌지 않는다. */
+html[lang='en'] .sb-font-lang { width: 84px; }
 .sb-font {
   width: 136px;
   overflow: hidden;
