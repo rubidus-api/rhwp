@@ -170,7 +170,8 @@ export class MenuBar {
     }
   }
 
-  private closeAll(): void {
+  /** 열린 메뉴를 모두 닫는다 — 메뉴 막대의 다른 팝업(표시 언어)이 열릴 때도 부른다. */
+  closeAll(): void {
     this.openMenu?.classList.remove('open');
     this.openMenu = null;
   }

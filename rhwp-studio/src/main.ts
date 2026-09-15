@@ -15,6 +15,7 @@ import {
   toolbarSplitItems,
 } from '@/ui/toolbar-split-menu';
 import { MenuBar } from '@/ui/menu-bar';
+import { createLanguageMenu } from '@/ui/language-menu';
 import { loadWebFonts, resolveCanvasKitFontPlan } from '@/core/font-loader';
 import { withCanvasKitSurfaceBlockers } from '@/core/canvaskit-document-preflight';
 import { loadExtensionViewerSettings, type ExtensionViewerSettings } from '@/core/extension-settings';
@@ -104,7 +105,8 @@ import { installEmbedRuntime } from '@/embed/runtime';
 import type { EmbedRendererRuntimeRequestV1 } from '@/embed/rpc-router';
 import { enrichFontDecisionTrace } from '@/core/font-decision-trace';
 import { DocumentAgentController } from '@/document-agent/controller';
-import { initI18n, t } from '@/i18n/index.ts';
+import { getLocale, initI18n, setPreferredLocale, t } from '@/i18n/index.ts';
+import { switchDisplayLocale } from '@/i18n/locale-switch.ts';
 
 // 언어팩 초기화 — 정적 마크업의 라벨을 결정된 로케일로 갱신한다. 카탈로그에 없는 키는
 // 원문(ko)으로 물러나므로 번역이 없는 상태에서도 화면은 도입 전과 같다.
@@ -373,6 +375,38 @@ function pruneEmbedChrome(): void {
   if (last?.classList.contains('md-sep')) last.remove();
 }
 if (chromeMode === 'embed') pruneEmbedChrome();
+
+/** 메뉴 막대 — 문서 초기화 뒤에 만든다. 표시 언어 메뉴가 열릴 때 열린 메뉴를 닫는 데 쓴다. */
+let menuBar: MenuBar | null = null;
+
+/**
+ * 표시 언어 메뉴(#5852) — 메뉴 막대 오른쪽 끝, 기본 도구 상자 접기 단추 앞.
+ * 고르면 저장하지 않은 변경을 기존 보호 흐름으로 확인한 뒤 선택을 저장하고 새로 실행한다.
+ * embed 프로파일은 호스트가 `?lang=` 으로 언어를 정하므로 만들지 않는다.
+ */
+function installLanguageMenu(): void {
+  const nav = document.getElementById('menu-bar');
+  if (!nav) return;
+  const menu = createLanguageMenu({
+    currentLocale: getLocale(),
+    onOpen: () => menuBar?.closeAll(),
+    onSelect: (locale) => {
+      void switchDisplayLocale(locale, {
+        currentLocale: getLocale(),
+        confirmUnsavedChanges: () => confirmSaveBeforeReplacingDocument(commandServices),
+        storePreference: (next) => { setPreferredLocale(next); },
+        markClean: () => documentState.markClean('display-locale-change'),
+        currentHref: window.location.href,
+        navigate: (href) => {
+          if (href === window.location.href) window.location.reload();
+          else window.location.replace(href);
+        },
+      });
+    },
+  });
+  nav.insertBefore(menu, document.getElementById('toolbox-basic-toggle'));
+}
+if (chromeMode !== 'embed') installLanguageMenu();
 
 if (chromeMode === 'embed') {
   // 문서 로드 전에는 InputHandler가 없어 shortcut-map 경로가 저장·인쇄 단축키를
@@ -686,7 +720,7 @@ async function initialize(): Promise<void> {
       new TableObjectRenderer(container, canvasView.getVirtualScroll(), true),
     );
 
-    new MenuBar(document.getElementById('menu-bar')!, eventBus, dispatcher, registry, {
+    menuBar = new MenuBar(document.getElementById('menu-bar')!, eventBus, dispatcher, registry, {
       onMenuOpen: (menuName) => {
         if (menuName === 'file') void renderRecentSubmenu();
       },

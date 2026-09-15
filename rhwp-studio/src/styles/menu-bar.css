@@ -58,6 +58,100 @@
   transform: translateY(2px) rotate(225deg);
 }
 
+/* 표시 언어 메뉴(#5852) — 오른쪽 끝, 기본 도구 상자 접기 단추 앞. 지구본과 언어 코드만 보인다. */
+.menu-locale {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+
+/* 오른쪽으로 미는 여백은 언어 메뉴가 맡는다(둘 다 auto 면 남는 폭을 나눠 가진다). */
+.menu-locale + .menu-toolbox-toggle {
+  margin-left: 2px;
+}
+
+.menu-locale-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 22px;
+  padding: 0 5px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.menu-locale-toggle:hover,
+.menu-locale-toggle:focus-visible,
+.menu-locale.open .menu-locale-toggle {
+  border-color: var(--accent-hover);
+  background: var(--ui-accent-bg);
+  color: var(--color-primary-dark);
+  outline: none;
+}
+
+.menu-locale-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.1;
+}
+
+.menu-locale-code {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.menu-locale-list {
+  position: absolute;
+  top: calc(100% + 2px);
+  right: 0;
+  min-width: 128px;
+  padding: 4px 0;
+  background: var(--color-surface);
+  border: 1px solid var(--ui-border);
+  box-shadow: var(--shadow-dropdown);
+  z-index: 1000;
+}
+
+.menu-locale-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 5px 16px 5px 28px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--font-size-base);
+  line-height: 16px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-locale-item:hover,
+.menu-locale-item:focus-visible {
+  background: var(--ui-selected);
+  color: var(--color-primary-dark);
+  outline: none;
+}
+
+.menu-locale-item[aria-checked='true']::before {
+  position: absolute;
+  left: 11px;
+  content: '✓';
+}
+
 .menu-title {
   display: inline-block;
   padding: 4px 14px;

@@ -148,7 +148,75 @@
     background: var(--color-bg-light);
   }
 
+  /* 언어 메뉴도 접기 단추 바로 앞에 붙어 남는다. 목록은 가로 스크롤 영역 밖(viewport)에 연다. */
+  .menu-locale {
+    position: sticky;
+    right: 26px;
+    z-index: 2;
+    background: var(--color-bg-light);
+  }
+
+  .menu-locale-list {
+    position: fixed;
+    top: 28px;
+    right: 8px;
+  }
+
   .menu-item.open > .menu-dropdown {
+    position: fixed;
+    top: 28px;
+    left: 8px;
+  }
+}
+
+/* 좁은 폭에서는 언어 단추를 지구본만 보여 메뉴 제목 자리를 지킨다(한국어 480px 에서 메뉴 줄에 들어간다). */
+@media (max-width: 599px) {
+  .menu-locale-code {
+    display: none;
+  }
+
+  .menu-locale-toggle {
+    padding: 0 4px;
+  }
+}
+
+/*
+ * 영어 메뉴 제목은 한국어보다 약 70px 넓어 480~559px 에서도 메뉴 줄이 넘친다(접기 단추가 화면 밖으로 밀림).
+ * 위의 479px 이하 규칙과 같은 방식으로 메뉴 행만 가로 이동시키고 두 단추를 오른쪽에 남긴다.
+ */
+@media (max-width: 559px) {
+  html[lang='en'] #menu-bar {
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+  }
+
+  html[lang='en'] #menu-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  html[lang='en'] .menu-toolbox-toggle {
+    position: sticky;
+    right: 0;
+    z-index: 2;
+    background: var(--color-bg-light);
+  }
+
+  html[lang='en'] .menu-locale {
+    position: sticky;
+    right: 26px;
+    z-index: 2;
+    background: var(--color-bg-light);
+  }
+
+  html[lang='en'] .menu-locale-list {
+    position: fixed;
+    top: 28px;
+    right: 8px;
+  }
+
+  html[lang='en'] .menu-item.open > .menu-dropdown {
     position: fixed;
     top: 28px;
     left: 8px;
@@ -163,6 +231,19 @@
   }
 
   .menu-item.open > .menu-dropdown {
+    top: 40px;
+  }
+}
+
+/* 좁은 터치 화면에서 메뉴 막대가 40px 이 되면 viewport 에 고정한 언어 목록도 그 아래로 내린다. */
+@media (max-width: 479px) and (hover: none) and (pointer: coarse) {
+  .menu-locale-list {
+    top: 40px;
+  }
+}
+
+@media (max-width: 559px) and (hover: none) and (pointer: coarse) {
+  html[lang='en'] .menu-locale-list {
     top: 40px;
   }
 }

@@ -34,3 +34,10 @@ test('index.html 은 theme-init 바로 뒤에서 locale-init 을 동기 로드�
   assert.ok(!/<script[^>]*src="\/locale-init\.js"[^>]*(defer|type="module")/.test(html),
     'defer/module 이면 번들 뒤에 돌아 깜빡임을 못 막는다');
 });
+
+test('locale-init.js 의 지원 목록은 SUPPORTED_LOCALES 와 같다 — 언어팩을 더할 때 한쪽만 고치지 않게', async () => {
+  const { SUPPORTED_LOCALES } = await import('../src/i18n/core.ts');
+  const listed = /const supported = \[([^\]]*)\]/.exec(initSource)?.[1] ?? '';
+  const locales = [...listed.matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  assert.deepEqual(locales, [...SUPPORTED_LOCALES]);
+});

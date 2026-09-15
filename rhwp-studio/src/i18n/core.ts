@@ -11,13 +11,28 @@
 /** 평면 키→문자열 표. 중첩하지 않는다(검색·중복검사·병합이 쉬워진다). */
 export type Catalog = Readonly<Record<string, string>>;
 
-/** 지원 로케일. 늘어나면 여기에 추가한다. */
+/**
+ * 지원 로케일. 늘어나면 여기와 SUPPORTED_LOCALES·LOCALE_NATIVE_NAMES, 카탈로그 등록(index.ts),
+ * public/locale-init.js 의 목록에 함께 추가한다. 표시 언어 메뉴는 SUPPORTED_LOCALES 를 그대로 보여 준다.
+ */
 export type Locale = 'ko' | 'en';
 
 /** 최종 기본값. 원문 로케일이기도 하다. */
 export const DEFAULT_LOCALE: Locale = 'ko';
 
-const SUPPORTED: readonly Locale[] = ['ko', 'en'];
+/** 지원 로케일 목록 — 표시 언어 메뉴의 순서이기도 하다. */
+export const SUPPORTED_LOCALES: readonly Locale[] = ['ko', 'en'];
+
+/**
+ * 각 언어를 그 언어 자신의 표기로 적은 이름. 표시 언어 메뉴는 현재 화면 언어와 상관없이
+ * 이 이름을 보여 준다 — 화면 언어를 읽지 못하는 사람도 자기 언어를 찾을 수 있어야 하므로 번역하지 않는다.
+ */
+export const LOCALE_NATIVE_NAMES: Readonly<Record<Locale, string>> = {
+  ko: '한국어',
+  en: 'English',
+};
+
+const SUPPORTED = SUPPORTED_LOCALES;
 
 /**
  * 문자열 파라미터. 이름 자리표시자 `{name}` 으로 치환한다.
